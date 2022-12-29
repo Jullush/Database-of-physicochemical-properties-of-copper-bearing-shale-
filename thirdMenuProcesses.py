@@ -1,6 +1,23 @@
 from tkinter import *
 import fourthMenuFragmentation
 import fifthMenuFragmentation
+import listingSortedArticles
+
+
+Researches = {
+    1: "FLOKULACJA",
+    2: "SEPARACJA ELEKTRYCZNA",
+    3: "AGLOMERACJA OLEJOWA",
+    4: "KOAGULACJA",
+    5: "FLOTACJA",
+    6: "ROZDRABNIANIE CHEMICZNE"
+}
+
+
+def listing_articles(x, y):
+    listingSortedArticles.chosen_article = x
+    listingSortedArticles.chosen_article_menu_id = y
+    listingSortedArticles.ListingSortedArticles()
 
 
 def fifth_menu_fragmentation():
@@ -30,16 +47,20 @@ class ThirdMenu(Toplevel):
                               command=fifth_menu_fragmentation)
         first_button.place(x=30, y=25)
 
-        second_button = Button(self.mainFrame, text="FLOKULACJA", font="arial 12")
+        second_button = Button(self.mainFrame, text="FLOKULACJA", font="arial 12",
+                               command=lambda: listing_articles(Researches[1], 9))
         second_button.place(x=85, y=75)
 
-        third_button = Button(self.mainFrame, text="SEPARACJA ELEKTRYCZNA", font="arial 12")
+        third_button = Button(self.mainFrame, text="SEPARACJA ELEKTRYCZNA", font="arial 12",
+                              command=lambda: listing_articles(Researches[2], 10))
         third_button.place(x=35, y=125)
 
-        fourth_button = Button(self.mainFrame, text="AGLOMERACJA OLEJOWA", font="arial 12")
+        fourth_button = Button(self.mainFrame, text="AGLOMERACJA OLEJOWA", font="arial 12",
+                               command=lambda: listing_articles(Researches[3], 11))
         fourth_button.place(x=40, y=175)
 
-        fifth_button = Button(self.mainFrame, text="KOAGULACJA", font="arial 12")
+        fifth_button = Button(self.mainFrame, text="KOAGULACJA", font="arial 12",
+                              command=lambda: listing_articles(Researches[4], 12))
         fifth_button.place(x=85, y=225)
 
         sixth_button = Button(self.mainFrame, text="FLOTACJA", font="arial 12", command=fourth_menu_fragmentation)
