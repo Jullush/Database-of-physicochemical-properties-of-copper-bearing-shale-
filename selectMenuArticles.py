@@ -31,7 +31,8 @@ class SelectMenuArticles(Toplevel):
         heading2.place(x=850, y=15)
 
         # lists and scrollbars
-        self.listOfArticles = Listbox(self.centerLabel, height=20, width=120, font='times 12', bg='#FAFAFA')
+        self.listOfArticles = Listbox(self.centerLabel, height=20, width=120, font='times 12', bg='#FAFAFA',
+                                      cursor="hand2")
         self.listOfArticles.grid(sticky=N, row=0, column=0, padx=(5, 21), pady=(5, 17))
         self.rightScrollbar = Scrollbar(self.centerLabel, orient="vertical")
         self.downScrollbar = Scrollbar(self.centerLabel, orient="horizontal")

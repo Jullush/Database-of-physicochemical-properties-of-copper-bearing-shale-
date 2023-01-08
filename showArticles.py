@@ -28,7 +28,7 @@ def showArticle(self):
 
 def displayMonograph1(x):
     text_to_highlight = ""
-    articles = c.execute("SELECT authors,title FROM articles_1 WHERE key_id < 1420").fetchall()
+    articles = c.execute("SELECT authors,title,publication_date FROM articles_1 WHERE key_id < 1420").fetchall()
     count = 0
     x.listOfArticles.delete(0, END)
     x.listOfArticles.insert(END, "\n")
@@ -39,7 +39,7 @@ def displayMonograph1(x):
         openArticle.OpenArticle()
 
     for article in articles:
-        x.listOfArticles.insert(count, article[0] + " - " + article[1])
+        x.listOfArticles.insert(count, article[0] + " - " + article[1] + " - " + " Ł.M I, " + str(article[2]))
         count += 1
 
     def display_the_art(evt):
@@ -48,7 +48,7 @@ def displayMonograph1(x):
             value = str(x.listOfArticles.get(x.listOfArticles.curselection()))
             id = value.split(' - ')[1]
             # print(id)
-            article_to_find = c.execute("SELECT key_id FROM articles_1 WHERE title=?",(id,))
+            article_to_find = c.execute("SELECT key_id FROM articles_1 WHERE title=?", (id,))
             article_to_find_key_id = article_to_find.fetchall()
             article_to_find_key_id_to_translate_1 = str(article_to_find_key_id)
             article_to_find_key_id_to_translate_2 = article_to_find_key_id_to_translate_1.translate(({ord(b): None for
@@ -80,23 +80,21 @@ def displayMonograph1(x):
 
 def displayMonograph2(x):
     text_to_highlight = ""
-    articles = c.execute("SELECT authors,title,date FROM articles_1 WHERE key_id < 1638 AND key_id > 1420").fetchall()
+    articles = c.execute("SELECT authors,title, publication_date "
+                         "FROM articles_1 "
+                         "WHERE key_id < 1638 AND key_id > 1420").fetchall()
     count = 0
     x.listOfArticles.delete(0, END)
     x.listOfArticles.insert(END, "\n")
 
     for article in articles:
-        x.listOfArticles.insert(count, article[0] + " - " + article[1])
+        x.listOfArticles.insert(count, article[0] + " - " + article[1] + " - " + " Ł.M II, " + str(article[2]))
         count = count + 1
 
     def showArticle_(x, y):
         openArticle.article_key_number = x
         openArticle.text_to_highlight = y
         openArticle.OpenArticle()
-
-    for article in articles:
-        x.listOfArticles.insert(count, article[0] + " - " + article[1])
-        count += 1
 
     def display_the_art(evt):
 
@@ -136,14 +134,12 @@ def displayMonograph2(x):
 
 def displayMonograph3(x):
     text_to_highlight = ""
-    articles = c.execute("SELECT authors,title FROM articles_1 WHERE key_id < 1720 AND key_id >1638").fetchall()
+    articles = c.execute("SELECT authors,title, publication_date "
+                         "FROM articles_1 "
+                         "WHERE key_id < 1720 AND key_id >1638").fetchall()
     count = 0
     x.listOfArticles.delete(0, END)
     x.listOfArticles.insert(END, "\n")
-
-    for article in articles:
-        x.listOfArticles.insert(count, article[0] + " - " + article[1])
-        count = count + 1
 
     def showArticle_(x, y):
         openArticle.article_key_number = x
@@ -151,7 +147,7 @@ def displayMonograph3(x):
         openArticle.OpenArticle()
 
     for article in articles:
-        x.listOfArticles.insert(count, article[0] + " - " + article[1])
+        x.listOfArticles.insert(count, article[0] + " - " + article[1] + " - " + " Ł.M III, " + str(article[2]))
         count += 1
 
     def display_the_art(evt):
@@ -160,7 +156,7 @@ def displayMonograph3(x):
             value = str(x.listOfArticles.get(x.listOfArticles.curselection()))
             id = value.split(' - ')[1]
             # print(id)
-            article_to_find = c.execute("SELECT key_id FROM articles_1 WHERE title=?",(id,))
+            article_to_find = c.execute("SELECT key_id FROM articles_1 WHERE title=?", (id,))
             article_to_find_key_id = article_to_find.fetchall()
             article_to_find_key_id_to_translate_1 = str(article_to_find_key_id)
             article_to_find_key_id_to_translate_2 = article_to_find_key_id_to_translate_1.translate(({ord(b): None for
@@ -192,12 +188,14 @@ def displayMonograph3(x):
 
 def displayMonograph4(x):
     text_to_highlight = ""
-    articles = c.execute("SELECT authors,title FROM articles_1 WHERE key_id < 1817 AND key_id > 1720").fetchall()
+    articles = c.execute("SELECT authors,title,publication_date date "
+                         "FROM articles_1 "
+                         "WHERE key_id < 1830 AND key_id > 1720").fetchall()
     count = 0
     x.listOfArticles.delete(0, END)
 
     for article in articles:
-        x.listOfArticles.insert(count, article[0] + " - " + article[1])
+        x.listOfArticles.insert(count, article[0] + " - " + article[1] + " - " + " Ł.M IV, " + str(article[2]))
         count = count + 1
 
     def showArticle_(x,y):
@@ -205,17 +203,13 @@ def displayMonograph4(x):
         openArticle.text_to_highlight = y
         openArticle.OpenArticle()
 
-    for article in articles:
-        x.listOfArticles.insert(count, article[0] + " - " + article[1])
-        count += 1
-
     def display_the_art(evt):
 
         if x.listOfArticles.curselection() != ():
             value = str(x.listOfArticles.get(x.listOfArticles.curselection()))
             id = value.split(' - ')[1]
             # print(id)
-            article_to_find = c.execute("SELECT key_id FROM articles_1 WHERE title=?",(id,))
+            article_to_find = c.execute("SELECT key_id FROM articles_1 WHERE title=?", (id,))
             article_to_find_key_id = article_to_find.fetchall()
             article_to_find_key_id_to_translate_1 = str(article_to_find_key_id)
             article_to_find_key_id_to_translate_2 = article_to_find_key_id_to_translate_1.translate(({ord(b): None for
@@ -248,22 +242,20 @@ def displayMonograph4(x):
 
 def displayMonograph5(x):
     text_to_highlight = ""
-    articles = c.execute("SELECT authors,title FROM articles_1 WHERE key_id < 2116 AND key_id > 1817").fetchall()
+    articles = c.execute("SELECT authors,title, publication_date "
+                         "FROM articles_1 "
+                         "WHERE key_id < 2116 AND key_id > 1817").fetchall()
     count = 0
     x.listOfArticles.delete(0, END)
 
     for article in articles:
-        x.listOfArticles.insert(count, article[0] + " - " + article[1])
+        x.listOfArticles.insert(count, article[0] + " - " + article[1] + " - " + " Ł.M V, " + str(article[2]))
         count = count + 1
 
     def showArticle_(x,y):
         openArticle.article_key_number = x
         openArticle.text_to_highlight = y
         openArticle.OpenArticle()
-
-    for article in articles:
-        x.listOfArticles.insert(count, article[0] + " - " + article[1])
-        count += 1
 
     def display_the_art(evt):
 
@@ -297,7 +289,7 @@ def displayMonograph5(x):
             openArticle.author = openArticle.author.translate(({ord(b): None for b in "'"}))
             openArticle.author = openArticle.author[:-1]
             print(article_key_id)
-            showArticle_(article_key_id,text_to_highlight)
+            showArticle_(article_key_id, text_to_highlight)
 
     x.listOfArticles.bind('<<ListboxSelect>>', display_the_art)
 

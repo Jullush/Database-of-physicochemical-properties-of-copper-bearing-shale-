@@ -4,13 +4,16 @@ import sqlite3
 import showMonografie
 import openArticle
 import firstMenu
+import main
+import information
+import comparisonMenu
 
 co = sqlite3.connect('monograph_db.db')
 c = co.cursor()
 
 global searching_for_an_article
-
 global no_highlight
+global info_button
 
 
 def cleaning_the_author_data(x):
@@ -25,6 +28,14 @@ def cleaning_the_title_data(x):
     openArticle.title = str(db_data_2)
 
 
+def show_info():
+    information.Information()
+
+
+def show_articles_comparison():
+    comparisonMenu.ComparisonMenu()
+
+
 def showMonograph():
     showMonografie.ShowMonografie()
 
@@ -36,7 +47,15 @@ def first_choice_Menu():
 class Main(object):
     def __init__(self, master):
         self.master = master
+
+        # ------
+        # arrow
+        main.info_button = Image.open('app_icons/info.png')
+        arrow_image_resized = main.info_button.resize((25, 25))
+        main.info_button = ImageTk.PhotoImage(arrow_image_resized)
+        main.info_button.image = main.info_button
         main.no_highlight = 0
+
         # ______ rockImage variables
         rock_image = Image.open('app_icons/rocks.png')
         rock_image_resized = rock_image.resize((150, 150))
@@ -64,11 +83,11 @@ class Main(object):
         self.entrySearch.grid(row=0, column=1, columnspan=3, padx=10, pady=10)
 
         self.searchButton = Button(center_frame, text='WYSZUKAJ', font='arial 12', bg='white',
-                                   command=self.article_searching)
+                                   command=self.article_searching, cursor="hand2")
         self.searchButton.grid(row=0, column=4, padx=20, pady=10)
 
         # _____ additional frames
-        handy_frame_two = Frame(master_frame, width=800, height=300)
+        handy_frame_two = Frame(master_frame, width=800, height=150)
         handy_frame_two.pack(side='bottom')
 
         additional_frame = Frame(master_frame, width=800, height=50)
@@ -89,61 +108,85 @@ class Main(object):
         # ________ Rock1
         rock_label = Label(master_frame, image=rock_image_done)
         rock_label.image = rock_image_done
-        rock_label.place(x=50, y=300)
+        rock_label.place(x=50, y=200)
 
         # ________ Rock1
         rock_label2 = Label(master_frame, image=rock_image_done_2)
         rock_label2.image = rock_image_done_2
-        rock_label2.place(x=1150, y=300)
+        rock_label2.place(x=1150, y=200)
 
         # __________ SearchBox
 
         self.listOfArticles = Listbox(search_frame, height=10, width=100, font='times 12', bg='grey', fg='white',
-                                      highlightthickness=2, highlightcolor='black', selectbackground='black')
+                                      highlightthickness=2, highlightcolor='black', selectbackground='black',
+                                      cursor="hand2", activestyle="dotbox")
         self.listOfArticles.grid(sticky=N, row=0, column=0, padx=(5, 21), pady=(5, 17))
         self.rightScrollbar = Scrollbar(search_frame, orient="vertical")
         self.downScrollbar = Scrollbar(search_frame, orient="horizontal")
         self.rightScrollbar.grid(row=0, column=0, pady=(0, 17), sticky=N + S + E)
         self.downScrollbar.grid(row=0, column=0, sticky=S + W + E)
         self.listOfArticles.config(yscrollcommand=self.rightScrollbar.set, xscrollcommand=self.downScrollbar.set)
-        self.downScrollbar.config(command=self.listOfArticles.xview)
-        self.rightScrollbar.config(command=self.listOfArticles.yview)
+        self.downScrollbar.config(command=self.listOfArticles.xview, cursor="hand2")
+        self.rightScrollbar.config(command=self.listOfArticles.yview, cursor="hand2")
 
         # MONOGRAPH buttons within the main menu
         self.MonographButton = Button(handy_frame_two, text=' Monografie ', font='arial 12 bold',
-                                      command=showMonograph)
-        self.MonographButton.place(x=675, y=100)
+                                      command=showMonograph, cursor="hand2")
+        self.MonographButton.place(x=675, y=50)
 
         # Article MENU buttons
         self.ArticleMenuButton = Button(handy_frame_two, text=' Menu wyboru badań  ',
                                         font='arial 12 bold',
-                                        command=first_choice_Menu)
-        self.ArticleMenuButton.place(x=0, y=100)
+                                        command=first_choice_Menu, cursor="hand2")
+        self.ArticleMenuButton.place(x=0, y=50)
 
-        self.Button_exit = Button(handy_frame_two, text='Zamknij', font='arial 13 bold', command=quit)
-        self.Button_exit.place(x=365, y=100)
+        self.Button_comparison = Button(handy_frame_two, text='Porównywanie artykułów', font='arial 13 bold',
+                                        cursor="hand2", command=show_articles_comparison)
+        self.Button_comparison.place(x=303, y=50)
+
+        self.Button_exit = Button(handy_frame_two, text='Zamknij', font='arial 13 bold', command=quit, cursor="hand2")
+        self.Button_exit.place(x=365, y=110)
+
+        self.info_button = Button(master_frame, image=main.info_button, cursor="hand2", command=show_info)
+        self.info_button.place(x=90, y=500)
 
     # _______ searching
 
     def article_searching(self):
         self.listOfArticles.delete(0, END)
-        searching_for_an_article = self.entrySearch.get()
+        article_to_search = self.entrySearch.get()
         searching = c.execute("SELECT article_id FROM full_text_search WHERE text_search LIKE ?",
-                              ('%' + searching_for_an_article + '%',)).fetchall()
-        article_tuple_to_list = [list[0] for list in searching]
-        print(searching_for_an_article)
+                              ('%' + article_to_search + '%',)).fetchall()
+        article_tuple_to_list = [list_of_articles[0] for list_of_articles in searching]
+        print(article_to_search)
         i = 0
+        publication = ""
         count = 0
+
         for x in article_tuple_to_list:
             searched_article = article_tuple_to_list[i]
-            searching_comparison = c.execute("SELECT authors, title FROM articles_1 WHERE key_id=? ",
+            searching_comparison = c.execute("SELECT authors, title, publication_date FROM articles_1 WHERE key_id=? ",
                                              (searched_article,)).fetchall()
+
             for article in searching_comparison:
-                self.listOfArticles.insert(count, str(article[0]) + " - " + str(article[1]))
+
+                if article[2] == 2014:
+                    publication = "Ł.M I, "
+                elif article[2] == 2016:
+                    publication = "Ł.M II, "
+                elif article[2] == 2018:
+                    publication = "Ł.M IV, "
+                elif article[2] == 2017:
+                    publication = "Ł.M III, "
+                elif article[2] == 2021:
+                    publication = "Ł.M V, "
+                else:
+                    pass
+
+                self.listOfArticles.insert(count, article[0] + " - " + article[1] + " - " + publication
+                                           + str(article[2]))
 
             i = i+1
-
-        # ------
 
         def showArticle_(x, y):
             openArticle.article_key_number = x
@@ -186,19 +229,19 @@ class Main(object):
                 openArticle.author = openArticle.author[:-1]
                 print(article_key_id)
                 main.no_highlight = 1
-                showArticle_(article_key_id, searching_for_an_article)
+                showArticle_(article_key_id, article_to_search)
 
         self.listOfArticles.bind('<<ListboxSelect>>', display_the_art_with_highlight)
 
 
-def main():
+def main_boot():
     root = Tk()
     Main(root)
     root.title("Baza Danych Łupka Miedzionośnego")
-    root.geometry("1350x750+350+200")
+    root.geometry("1350x650+150+150")
     root.iconbitmap('app_icons/mainicon.ico')
     root.mainloop()
 
 
 if __name__ == '__main__':
-    main()
+    main_boot()

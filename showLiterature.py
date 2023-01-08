@@ -1,7 +1,10 @@
 from tkinter import *
 import openArticle
 import sqlite3
+import showLiterature
+from PIL import Image, ImageTk
 
+global image_to_show_monograph
 co = sqlite3.connect("monograph_db.db")
 c = co.cursor()
 
@@ -10,7 +13,12 @@ class ShowLiterature(Toplevel):
     def __init__(self):
 
         Toplevel.__init__(self)
-
+        # arrow
+        showLiterature.image_to_show_monograph = Image.open('app_icons/arrow.png')
+        arrow_image_resized = showLiterature.image_to_show_monograph.resize((25, 25))
+        showLiterature.image_to_show_monograph = ImageTk.PhotoImage(arrow_image_resized)
+        showLiterature.image_to_show_monograph.image = showLiterature.image_to_show_monograph
+        # class
         self.geometry("500x600+500+200")
         self.title("Monografie")
         self.resizable(False, False)
@@ -40,11 +48,12 @@ class ShowLiterature(Toplevel):
         self.rightScrollbar.grid(row=0, column=0, pady=(0, 17), sticky=N+S+E)
         self.downScrollbar.grid(row=0, column=0, sticky=S+W+E)
         self.listOfArticles.config(yscrollcommand=self.rightScrollbar.set, xscrollcommand=self.downScrollbar.set)
-        self.downScrollbar.config(command=self.listOfArticles.xview)
-        self.rightScrollbar.config(command=self.listOfArticles.yview)
+        self.downScrollbar.config(command=self.listOfArticles.xview, cursor="hand2")
+        self.rightScrollbar.config(command=self.listOfArticles.yview, cursor="hand2")
 
-        self.Button_exit = Button(self.topFrame, text='Cofnij', font='arial 12', command=self.destroy)
-        self.Button_exit.place(x=40, y=20)
+        button_exit = Button(self.topFrame, image=showLiterature.image_to_show_monograph, command=self.destroy,
+                             cursor="hand2")
+        button_exit.place(x=30, y=25)
 
         articles = c.execute(
             "SELECT *  FROM literature WHERE key_id=?", (openArticle.article_key_number,)).fetchall()
@@ -55,3 +64,4 @@ class ShowLiterature(Toplevel):
         for article in articles:
             self.listOfArticles.insert(count, str(article[1]))
             count = count + 1
+        self.listOfArticles.config(activestyle=NONE)
