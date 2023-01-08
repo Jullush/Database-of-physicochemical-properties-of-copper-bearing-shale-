@@ -1,0 +1,59 @@
+# creating comparison table for frothers 
+
+CREATE TABLE frothers_article_1_id_comparison 
+(article_id INTEGER, 
+frother_id INTEGER, 
+FOREIGN KEY (frother_id) REFERENCES frothers_id (frother_id), 
+FOREIGN KEY (article_id) REFERENCES articles_1(key_id))
+
+# creating collectors first table
+
+CREATE TABLE collectors
+(collector_id INTEGER, 
+collector_name TEXT, 
+PRIMARY KEY (collector_id))
+
+# creating comparison table for collectors 
+
+CREATE TABLE collectors_article_1_id_comparison 
+(article_id INTEGER, 
+collector_id INTEGER, 
+FOREIGN KEY (collector_id) REFERENCES collectors (collector_id), 
+FOREIGN KEY (article_id) REFERENCES articles_1(key_id))
+
+#creating first machines table
+
+CREATE TABLE machines
+(machine_id INTEGER, 
+machine_name TEXT, 
+PRIMARY KEY (machine_id))
+
+# creating comparison table for machines
+
+CREATE TABLE machines_article_1_id_comparison 
+(article_id INTEGER, 
+machines_id INTEGER, 
+FOREIGN KEY (machine_id) REFERENCES machines (machine_id), 
+FOREIGN KEY (article_id) REFERENCES articles_1(key_id))
+
+# renaming cloumn
+ALTER TABLE articles_1
+RENAME COLUMN date TO publication date
+
+#other_filters
+
+CREATE TABLE other_parameters_filtration(
+ph_id INTEGER, 
+hydrophobicity_id INTEGER, 
+temperature_id INTEGER, 
+FOREIGN KEY (ph_id) REFERENCES articles_1(key_id),
+FOREIGN KEY (hydrophobicity_id) REFERENCES articles_1(key_id),
+FOREIGN KEY (temperature_id) REFERENCES articles_1(key_id)
+)
+
+#depressors
+CREATE TABLE depressors
+(depressor_id INTEGER, 
+depressor_name TEXT, 
+PRIMARY KEY (depressor_id))
+)
